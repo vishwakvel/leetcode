@@ -1,5 +1,9 @@
 class Solution:
     def isAnagram(self, s: str, t: str) -> bool:
-        if len(s) != len(t): # if lengths are different then obviously false
-            return False
-        return sorted(s) == sorted(t) # if sorted lexicographically they should be the same if they are then true else false
+        """
+        1. Convert s and t into counters which is O(n) complexity
+        2. Return true if they're equal and false if they're not
+        """
+        from collections import Counter
+        
+        return Counter(s) == Counter(t)
