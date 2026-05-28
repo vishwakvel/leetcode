@@ -5,16 +5,14 @@ class Solution:
         2. Go through left first, so multiply ans[i] with each element in nums that is to the left
             a) Have accumulator that you change everytime
             b) Update ans[i] first then change acc
-        3. Go through right next, so multiply ans[i] with each element in nums that is to the right
-            a) Have accumulator that you change everytime (multiply because you have to keep left's progress)
-            b) update ans[i] first then change acc
+        3. Do the same with right
         """
         nums_len = len(nums)
         ans = [1] * nums_len
 
         left = 1
         for i in range(nums_len):
-            ans[i] = left
+            ans[i] *= left
             left *= nums[i]
         
         right = 1
