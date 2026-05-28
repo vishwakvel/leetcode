@@ -1,13 +1,17 @@
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        if k == 0:
-            return []
+        """
+        1. Convert nums to a counter
+        2. Use counter's built in method most_common to get the k most common numbers
+        3. Use a for loop to extract just the first element of each element in 2s output because most_common return not just the most common elements but also how many of each there are
+        """
         
-        numsdict = {}
+        from collections import Counter
 
-        for num in nums: # making a dict with key = num and value = count
-            numsdict[num] = 1 + numsdict.get(num, 0)
-        
-        sorted_numsdict = dict(sorted(numsdict.items(), key=lambda item: item[1], reverse = True)) # sorting the dict based on freq in descending order so most freq at the beginning
+        ans = []
+        nums_counter = Counter(nums)
 
-        return list(sorted_numsdict.keys())[:k] # returning first k keys which represent top k frequent elements
+        for l in nums_counter.most_common(k):
+            ans.append(l[0])
+
+        return ans
