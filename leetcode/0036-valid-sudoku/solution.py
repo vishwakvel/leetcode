@@ -1,14 +1,13 @@
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         """
-        3 Parts
-        1. For each row, have a set where u check first if number already in set before adding to it
-            a) If it is then false
-            b) If it isn't then add and continue
-        2. Same process for columns as well
-        3. For the 3x3 box, defaultdict for each box (r//3, c//3) and the values are a set of all the numbers and you check before adding a number if that number is already in value
-            a) If it is then false
-            b) If it isn't then add and continue
+        1. For each row, column, and 3x3 box, have a defaultdict with the default value being an empty set and the keys are i and j (row/col numbers)
+        2. Iterate through every single square
+            a) If its a "." continue
+            b) Check if the number in that square is already in any of the dicts
+                a) If it is, return False
+                b) If not, add the key value pair (index: value) to each of the dicts
+        3. If it goes through iteration fully, then it passed the tests so return True
         """
 
         rows = defaultdict(set)
