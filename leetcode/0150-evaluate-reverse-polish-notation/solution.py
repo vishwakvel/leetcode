@@ -1,25 +1,21 @@
 class Solution:
     def evalRPN(self, tokens: List[str]) -> int:
-        """
-        Postfix to infix conversion
-        1. 
-        """
         stack = []
 
-        for token in tokens:            
+        for token in tokens:
             if token in "+-*/":
-                second = int(stack.pop())
-                first = int(stack.pop())
+                a = int(stack.pop())
+                b = int(stack.pop())
 
                 if token == "+":
-                    stack.append(first+second)
+                    stack.append(a+b)
                 elif token == "-":
-                    stack.append(first-second)
+                    stack.append(b-a)
                 elif token == "*":
-                    stack.append(first*second)
+                    stack.append(b*a)
                 else:
-                    stack.append(int(first/second))
+                    stack.append(int(b/a))
             else:
                 stack.append(int(token))
         
-        return stack.pop()
+        return stack[0]
