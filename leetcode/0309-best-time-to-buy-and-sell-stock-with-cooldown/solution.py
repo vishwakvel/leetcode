@@ -2,7 +2,7 @@ class Solution:
     def maxProfit(self, prices: List[int]) -> int:
         profit = {}
 
-        def dfs(day, holding):
+        def dp(day, holding):
             if day >= len(prices):
                 return 0
 
@@ -10,11 +10,10 @@ class Solution:
                 return profit[(day, holding)]
             
             if holding:
-                ans = max(dfs(day + 1, True), prices[day] + dfs(day + 2, False)) # max of keeping today or selling today
+                profit[(day, holding)] = max(prices[day] + dp(day + 2, False), dp(day + 1, True))
             else:
-                ans = max(dfs(day + 1, False), -prices[day] + dfs(day + 1, True)) # max of skipping today or buying today
+                profit[(day, holding)] = max(-prices[day] + dp(day + 1, True), dp(day + 1, False))
             
-            profit[(day, holding)] = ans
-            return ans
-        
-        return dfs(0, False)
+            return profit[(day, holding)]
+
+        return dp(0, False)
