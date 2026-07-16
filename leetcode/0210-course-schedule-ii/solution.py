@@ -1,32 +1,32 @@
 class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
-        graph = {i: [] for i in range(numCourses)}
+        graph = defaultdict(list)
 
         for course, prereq in prerequisites:
             graph[prereq].append(course)
         
-        state = [0] * numCourses
+        states = [0] * numCourses
         ans = []
 
         def dfs(course):
-            if state[course] == 1:
+            if states[course] == 1: # in cycle
                 return False
             
-            if state[course] == 2:
+            if states[course] == 2: # alr processed
                 return True
             
-            state[course] = 1
+            states[course] = 1
 
-            for neighbor in graph[course]:
+            for neighbor in graph[course]: # post order dfs to make sure we dont enter cycle or corner ourselves
                 if not dfs(neighbor):
                     return False
-
-            state[course] = 2
+            
+            states[course] = 2 # mark finished
             ans.append(course)
             return True
         
-        for course in range(numCourses):
-            if not dfs(course):
+        for i in range(numCourses):
+            if not dfs(i):
                 return []
         
         return ans[::-1]
