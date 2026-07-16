@@ -1,11 +1,28 @@
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
-        n = len(nums)
-        dp = [1] * n
+        ans = []
 
-        for i in range(n):
-            for j in range(i):
-                if nums[j] < nums[i]:
-                    dp[i] = max(dp[i], dp[j] + 1)
+        def binarysearch(arr, n):
+            left = 0
+            right = len(arr) - 1
 
-        return max(dp)
+            while left < right:
+                mid = (left + right) // 2
+
+                if n == arr[mid]:
+                    return mid
+                elif n > arr[mid]:
+                    left = mid + 1
+                else:
+                    right = mid
+                
+            return left
+
+        for num in nums:
+            if not ans or num > ans[-1]:
+                ans.append(num)
+            else:
+                i = binarysearch(ans, num)
+                ans[i] = num
+        
+        return len(ans)
