@@ -11,7 +11,7 @@ class Solution:
         def dfs(node):
             if not node:
                 return
-            
+
             dfs(node.left)
             ans.append(node.val)
             dfs(node.right)
