@@ -1,26 +1,34 @@
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
-        ROWS = len(board)
-        COLS = len(board[0])
+        m = len(board)
+        n = len(board[0])
+        visited = set()
 
-        def backtrack(row, col, index):
-            if index == len(word):
+        def backtrack(i, r, c):
+            if i >= len(word):
                 return True
-
-            if (row < 0 or row >= ROWS or col < 0 or col >= COLS or board[row][col] != word[index]):
+            
+            if r >= m or c >= n or r < 0 or c < 0:
                 return False
             
-            char = board[row][col]
-            board[row][col] = "#"
+            if (r, c) in visited:
+                return False
+            
+            if board[r][c] != word[i]:
+                return False
+            
+            visited.add((r, c))
+            
+            
+            found = backtrack(i+1, r+1, c) or backtrack(i+1, r, c+1) or backtrack(i+1, r-1, c) or backtrack(i+1, r, c-1)
+            
+            visited.remove((r, c))
 
-            found = backtrack(row + 1, col, index + 1) or backtrack(row - 1, col, index + 1) or backtrack(row, col + 1, index + 1) or backtrack(row, col - 1, index + 1)
-
-            board[row][col] = char
             return found
-
-        for row in range(ROWS):
-            for col in range(COLS):
-                if backtrack(row, col, 0):
+        
+        for row in range(m):
+            for col in range(n):
+                if backtrack(0, row, col):
                     return True
-
+        
         return False
