@@ -6,21 +6,24 @@
 #         self.right = right
 class Solution:
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
-        hmap = {val:i for i, val in enumerate(inorder)}
+        hashmap = {val: i for i, val in enumerate(inorder)}
         p = 0
 
-        def dfs(l, r):
+        def dfs(left, right):
             nonlocal p
 
-            if l > r:
+            if left > right:
                 return None
             
-            root_val = preorder[p]
+            nodeval = preorder[p]
             p += 1
-            root = TreeNode(root_val)
-            mid = hmap[root_val]
-            root.left = dfs(l, mid-1)
-            root.right = dfs(mid+1, r)
-            return root
 
-        return dfs(0, len(inorder)-1)
+            node = TreeNode(nodeval)
+            index = hashmap[nodeval]
+
+            node.left = dfs(left, index-1)
+            node.right = dfs(index+1, right)
+
+            return node
+        
+        return dfs(0, len(inorder) - 1)
