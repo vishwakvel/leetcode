@@ -1,24 +1,24 @@
 class Solution:
     def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
         graph = defaultdict(list)
-        
-        for index, (var1, var2) in enumerate(equations):
-            graph[var1].append((var2, values[index]))
-            graph[var2].append((var1, 1/values[index]))
-        
-        def dfs(curr, target, visited):
-            if curr == target:
-                return 1.0
-            
-            visited.add(curr)
 
-            for neighbor, weight in graph[curr]:
+        for i, (start, end) in enumerate(equations):
+            graph[start].append((end, values[i]))
+            graph[end].append((start, 1/values[i]))
+        
+        def dfs(start, end, visited):
+            if start == end:
+                return 1.0
+
+            visited.add(start)
+            
+            for neighbor, weight in graph[start]:
                 if neighbor not in visited:
-                    result = dfs(neighbor, target, visited)
+                    result = dfs(neighbor, end, visited)
 
                     if result != -1:
                         return weight * result
-            
+                
             return -1
         
         ans = []
