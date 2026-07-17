@@ -1,30 +1,31 @@
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        graph = {i: [] for i in range(numCourses)}
-
+        # detect cycles
+        graph = defaultdict(list)
+        
         for course, prereq in prerequisites:
             graph[prereq].append(course)
         
-        state = [0] * numCourses
+        states = [0] * numCourses
 
         def dfs(course):
-            if state[course] == 1: # cycle
+            if states[course] == 1:
                 return False
             
-            if state[course] == 2: # alr checked
+            if states[course] == 2:
                 return True
+        
+            states[course] = 1
             
-            state[course] = 1
-
             for neighbor in graph[course]:
                 if not dfs(neighbor):
                     return False
-            
-            state[course] = 2 # finished
+                
+            states[course] = 2
             return True
         
-        for course in range(numCourses):
-            if not dfs(course):
+        for i in range(numCourses):
+            if not dfs(i):
                 return False
         
         return True
