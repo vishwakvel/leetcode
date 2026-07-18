@@ -1,14 +1,15 @@
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
+        # every path is an answer
         ans = []
 
-        def backtrack(start: int, path: List[int]):
-            ans.append(path[:])
+        def backtracking(path, start):
+            ans.append(path.copy())
 
-            for i in range(start, len(nums)):
+            for i in range(start, len(nums)): # since u can't reuse any numbers you start from left to right and every time u move up u have start so that u cant look backward
                 path.append(nums[i])
-                backtrack(i + 1, path)
+                backtracking(path, i+1)
                 path.pop()
         
-        backtrack(0, [])
+        backtracking([], 0)
         return ans
