@@ -2,14 +2,14 @@ class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
         ans = []
 
-        def backtracking(path):
+        def backtracking(path): # no need for visited since theyre distinct ints
             if len(path) == len(nums):
                 ans.append(path.copy())
                 return
             
-            for num in nums:
-                if num not in path:
-                    path.append(num)
+            for i in range(len(nums)):
+                if nums[i] not in path:
+                    path.append(nums[i])
                     backtracking(path)
                     path.pop()
         
