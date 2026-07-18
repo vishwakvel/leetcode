@@ -1,29 +1,16 @@
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        """
-        money = {}
+        # 2 choices either rob td and skip tmrw or skip td and move onto tmrw
+        memo = {}
 
-        def dp(house):
-            if house >= len(nums):
+        def dp(index):
+            if index >= len(nums):
                 return 0
             
-            if house in money:
-                return money[house]
-
-            money[house] = max(nums[house] + dp(house + 2), dp(house + 1))
-
-            return money[house]
+            if index in memo:
+                return memo[index]
+            
+            memo[index] = max(nums[index] + dp(index+2), dp(index+1))
+            return memo[index]
         
         return dp(0)
-"""
-        if len(nums) == 1:
-            return nums[-1]
-            
-        dp = [0] * len(nums)
-        dp[0] = nums[0]
-        dp[1] = max(nums[0], nums[1])
-
-        for i in range(2, len(nums)):
-            dp[i] = max(nums[i] + dp[i-2], dp[i-1])
-        
-        return dp[-1]
