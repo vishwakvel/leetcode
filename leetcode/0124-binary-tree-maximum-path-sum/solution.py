@@ -10,16 +10,16 @@ class Solution:
 
         def dfs(node):
             nonlocal ans
-
+            
             if not node:
                 return 0
-
+            
             left = max(dfs(node.left), 0)
             right = max(dfs(node.right), 0)
 
-            ans = max(ans, left + right + node.val)
+            ans = max(ans, node.val + left + right)
 
             return node.val + max(left, right)
-
+        
         dfs(root)
         return ans
