@@ -3,16 +3,16 @@ class Solution:
         nums.sort()
         ans = []
 
-        def backtrack(start: int, path: List[int]):
-            ans.append(path[:])
+        def backtracking(path, index):
+            ans.append(path.copy())
 
-            for i in range(start, len(nums)):
-                if i > start and nums[i] == nums[i - 1]:
+            for i in range(index, len(nums)):
+                if i > index and nums[i-1] == nums[i]: # > index and not 0 because we need to compare with those on same level which means starting at index and not looking at ones chosen before
                     continue
-                    
+                
                 path.append(nums[i])
-                backtrack(i + 1, path)
+                backtracking(path, i+1)
                 path.pop()
         
-        backtrack(0, [])
+        backtracking([], 0)
         return ans
