@@ -2,33 +2,29 @@ class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
         m = len(board)
         n = len(board[0])
-        visited = set()
 
-        def backtrack(i, r, c):
-            if i >= len(word):
+        def backtracking(i, row, col):
+            if i == len(word):
                 return True
             
-            if r >= m or c >= n or r < 0 or c < 0:
+            if row >= m or col >= n or row < 0 or col < 0:
                 return False
             
-            if (r, c) in visited:
-                return False
-            
-            if board[r][c] != word[i]:
-                return False
-            
-            visited.add((r, c))
-            
-            
-            found = backtrack(i+1, r+1, c) or backtrack(i+1, r, c+1) or backtrack(i+1, r-1, c) or backtrack(i+1, r, c-1)
-            
-            visited.remove((r, c))
+            char = board[row][col]
 
+            if char != word[i] or char == ".":
+                return False
+            
+            board[row][col] = "."
+
+            found = backtracking(i+1, row, col+1) or backtracking(i+1, row, col-1) or backtracking(i+1, row+1, col) or backtracking(i+1, row-1, col)
+
+            board[row][col] = char
             return found
         
-        for row in range(m):
-            for col in range(n):
-                if backtrack(0, row, col):
+        for r in range(m):
+            for c in range(n):
+                if backtracking(0, r, c):
                     return True
         
         return False
