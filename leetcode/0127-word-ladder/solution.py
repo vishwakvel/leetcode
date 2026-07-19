@@ -3,7 +3,7 @@ from collections import deque
 class Solution:
     def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
         visited = set(wordList)
-
+        
         if endWord not in visited:
             return 0
 
@@ -16,8 +16,8 @@ class Solution:
                 return steps
             
             for i in range(len(word)):
-                for c in "abcdefghijklmnopqrstuvwxyz":
-                    new = word[:i] + c + word[i+1:]
+                for char in "abcdefghijklmnopqrstuvwxyz":
+                    new = word[:i] + char + word[i+1:]
 
                     if new in visited:
                         visited.remove(new)
