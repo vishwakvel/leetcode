@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 class Node:
     def __init__(self, key, value, freq=1):
         self.key = key
@@ -14,7 +16,7 @@ class DLL:
         self.tail.prev = self.head
         self.size = 0
     
-    def add(self, node):
+    def insert(self, node):
         first = self.head.next
 
         node.next = first
@@ -37,56 +39,55 @@ class DLL:
     def poplru(self):
         if self.size == 0:
             return None
-        
+
         lru = self.tail.prev
         self.remove(lru)
         return lru
 
 class LFUCache:
-    from collections import defaultdict
-
     def __init__(self, capacity: int):
-        self.nodes = {} # key to node
-        self.freq = defaultdict(DLL) # freq to dll of nodes of that freq (lru order)
-        self.minFreq = 0
+        self.hashmap = {} # key to node
+        self.freq = defaultdict(DLL) # freq to dll
         self.capacity = capacity
+        self.minFreq = 0
     
     def update(self, node):
         freq = node.freq
 
         self.freq[freq].remove(node)
 
-        if self.freq[freq].size == 0 and freq == self.minFreq:
+        if freq == self.minFreq and self.freq[freq].size == 0:
             self.minFreq += 1
         
-        node.freq += 1
-
-        self.freq[node.freq].add(node)
+        freq += 1
+        node.freq = freq
+        self.freq[node.freq].insert(node)
 
     def get(self, key: int) -> int:
-        if key not in self.nodes:
+        if key not in self.hashmap:
             return -1
         
-        node = self.nodes[key]
+        node = self.hashmap[key]
         self.update(node)
         return node.value
-        
 
     def put(self, key: int, value: int) -> None:
-        if key in self.nodes:
-            node = self.nodes[key]
+        if key in self.hashmap:
+            node = self.hashmap[key]
             node.value = value
             self.update(node)
             return
         
-        if len(self.nodes) == self.capacity:
-            lru = self.freq[self.minFreq].poplru()
-            del self.nodes[lru.key]
-        
         node = Node(key, value)
-        self.nodes[key] = node
+        self.hashmap[key] = node
+
+        if len(self.hashmap) > self.capacity:
+            lru = self.freq[self.minFreq].poplru()
+            del self.hashmap[lru.key]
+        
         self.minFreq = 1
-        self.freq[self.minFreq].add(node)
+        self.freq[1].insert(node)
+
 
 # Your LFUCache object will be instantiated and called as such:
 # obj = LFUCache(capacity)
