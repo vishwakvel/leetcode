@@ -3,43 +3,41 @@ import heapq
 class Solution:
     def getNumberOfBacklogOrders(self, orders: List[List[int]]) -> int:
         MOD = 10**9 + 7
-        buy = [] # max heap
-        sell = [] # min heap
+        buyheap = [] # max heap -> price, amount
+        sellheap = [] # min heap -> price, amount
 
-        for order in orders:
-            price, amount, orderType = order
-
-            if orderType == 0: # buy order
-                while amount > 0 and sell and sell[0][0] <= price:
-                    sell_price, sell_amount = heapq.heappop(sell)
-                    trade = min(amount, sell_amount)
+        for price, amount, orderType in orders:
+            if orderType == 0: # buy
+                while sellheap and amount > 0 and sellheap[0][0] <= price:
+                    sellprice, sellamount = heapq.heappop(sellheap)
+                    trade = min(amount, sellamount)
                     amount -= trade
-                    sell_amount -= trade
+                    sellamount -= trade
 
-                    if sell_amount > 0:
-                        heapq.heappush(sell, (sell_price, sell_amount))
-
+                    if sellamount > 0:
+                        heapq.heappush(sellheap, (sellprice, sellamount))
+                
                 if amount > 0:
-                    heapq.heappush(buy, (-price, amount))
-            else:
-                while amount > 0 and buy and -buy[0][0] >= price:
-                    neg_buy_price, buy_amount = heapq.heappop(buy)
-                    trade = min(amount, buy_amount)
+                    heapq.heappush(buyheap, (-price, amount))
+            else: # sell
+                while buyheap and amount > 0 and -buyheap[0][0] >= price:
+                    buyprice, buyamount = heapq.heappop(buyheap)
+                    trade = min(amount, buyamount)
                     amount -= trade
-                    buy_amount -= trade
+                    buyamount -= trade
 
-                    if buy_amount > 0:
-                        heapq.heappush(buy, (neg_buy_price, buy_amount))
-
+                    if buyamount > 0:
+                        heapq.heappush(buyheap, (buyprice, buyamount))
+                    
                 if amount > 0:
-                    heapq.heappush(sell, (price, amount))
+                    heapq.heappush(sellheap, (price, amount))
         
         ans = 0
 
-        while buy:
-            ans = (ans + heapq.heappop(buy)[1]) % MOD
+        for _, amount in buyheap:
+            ans += amount
         
-        while sell:
-            ans = (ans + heapq.heappop(sell)[1]) % MOD
-
-        return ans
+        for _, amount in sellheap:
+            ans += amount
+    
+        return ans % MOD
