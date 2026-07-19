@@ -12,18 +12,18 @@ class Solution:
         if not node:
             return None
         
-        mapping = {}
+        hashmap = {} # old to new node
 
-        def dfs(n):
-            if n in mapping:
-                return mapping[n]
-            
-            copy = Node(n.val)
-            mapping[n] = copy
+        def dfs(node):
+            if node in hashmap:
+                return hashmap[node]
 
-            for nei in n.neighbors:
-                copy.neighbors.append(dfs(nei))
-        
+            copy = Node(node.val)
+            hashmap[node] = copy
+
+            for neighbor in node.neighbors:
+                copy.neighbors.append(dfs(neighbor))
+
             return copy
         
         return dfs(node)
