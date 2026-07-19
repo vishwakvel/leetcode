@@ -9,27 +9,27 @@ class LRUCache:
 
     def __init__(self, capacity: int):
         self.capacity = capacity
-        self.hashmap = {}
         self.head = Node(0, 0)
         self.tail = Node(0, 0)
         self.head.next = self.tail
         self.tail.prev = self.head
-
-    def insert(self, node):
-        first = self.head.next
-
-        node.prev = self.head
-        node.next = first
-
-        self.head.next = node
-        first.prev = node
+        self.hashmap = {} # key to node
     
     def remove(self, node):
         prev = node.prev
         nxt = node.next
-
+    
         prev.next = nxt
         nxt.prev = prev
+    
+    def insert(self, node):
+        first = self.head.next
+
+        node.next = first
+        node.prev = self.head
+
+        self.head.next = node
+        first.prev = node
 
     def get(self, key: int) -> int:
         if key not in self.hashmap:
@@ -43,8 +43,7 @@ class LRUCache:
     def put(self, key: int, value: int) -> None:
         if key in self.hashmap:
             self.remove(self.hashmap[key])
-            del self.hashmap[key]
-        
+
         node = Node(key, value)
         self.insert(node)
         self.hashmap[key] = node
