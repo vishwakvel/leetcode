@@ -5,21 +5,16 @@ class Solution:
         dirs = [(0, 1), (1, 0), (-1, 0), (0, -1)]
 
         def dfs(row, col):
-            if row < 0 or col < 0 or row >= m or col >= n:
+            if row < 0 or col < 0 or row >= m or col >= n or grid[row][col] == "0":
                 return
             
-            if grid[row][col] == "0":
-                return
-            
-            grid[row][col] = "0" # was island now change to 0 to mark visited
-            
-            for dr, dc in dirs:
-                nr = dr+row
-                nc = dc+col
-                dfs(nr, nc)
+            grid[row][col] = "0"
+
+            for nr, nc in dirs:
+                dfs(row + nr, col + nc)
         
         islands = 0
-
+        
         for r in range(m):
             for c in range(n):
                 if grid[r][c] == "1":
