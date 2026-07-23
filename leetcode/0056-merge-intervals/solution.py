@@ -1,16 +1,14 @@
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
-        # my logic is comparing 2 intervals if start1 < end2 and start2 < end1 then they overlap. sort list first since we want to keep track of earliest first
         intervals.sort(key=lambda x: x[0])
         ans = [intervals[0]]
 
-        for i in range(1, len(intervals)):
-            prevstart, prevend = ans[-1]
-            currstart, currend = intervals[i]
+        for start2, end2 in intervals[1:]:
+            start1, end1 = ans[-1]
 
-            if currstart <= prevend and prevstart <= currend:
-                ans[-1] = [prevstart, max(prevend, currend)]
+            if start2 <= end1 and start1 <= end2:
+                ans[-1] = [start1, max(end1, end2)]
             else:
-                ans.append([currstart, currend])
+                ans.append([start2, end2])
         
         return ans
