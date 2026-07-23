@@ -28,5 +28,5 @@ class Solution:
         for i in range(numCourses):
             if not dfs(i):
                 return []
-                
+        
         return ans[::-1]
