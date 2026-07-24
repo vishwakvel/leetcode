@@ -1,26 +1,26 @@
 class UndergroundSystem:
+    # average time requires total time and number of customers
+    # add to total time during checkout
+    # every time checkout called is a new customer so that keeps track of # of customers
 
     def __init__(self):
-        self.checkins = {} # id to (start station, start time)
-        self.routes = {} # (start station, end station) to (totaltime, count)
-        
+        self.hashmap = {} # id to (start, time)
+        self.routes = {} # (start, end) to (total time, count)
 
     def checkIn(self, id: int, stationName: str, t: int) -> None:
-        self.checkins[id] = (stationName, t)
+        self.hashmap[id] = (stationName, t)
 
     def checkOut(self, id: int, stationName: str, t: int) -> None:
-        startstation, starttime = self.checkins[id]
-        route = (startstation, stationName)
-
-        if route not in self.routes:
-            self.routes[route] = [0, 0]
+        start, time = self.hashmap[id]
+        if (start, stationName) not in self.routes:
+            self.routes[(start, stationName)] = [0, 0]
         
-        self.routes[route][0] += t - starttime
-        self.routes[route][1] += 1
+        self.routes[(start, stationName)][0] += t - time
+        self.routes[(start, stationName)][1] += 1
 
     def getAverageTime(self, startStation: str, endStation: str) -> float:
-        totaltime, count = self.routes[(startStation, endStation)]
-        return totaltime/count
+        total, count = self.routes[(startStation, endStation)]
+        return total / count
 
 
 # Your UndergroundSystem object will be instantiated and called as such:
