@@ -1,22 +1,14 @@
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        profit = {}
-
-        def dp(day, holding, count):
-            if day == len(prices):
-                return 0 if not holding else float("-inf")
-            
-            if count == 2:
-                return 0
-            
-            if (day, holding, count) in profit:
-                return profit[(day, holding, count)]
-            
-            if not holding:
-                profit[(day, holding, count)] = max(-prices[day] + dp(day+1, True, count), dp(day+1, False, count))
-            else: # sell td
-                profit[(day, holding, count)] = max(prices[day] + dp(day+1, False, count+1), dp(day+1, True, count))
-            
-            return profit[(day, holding, count)]
+        buy1=float("-inf")
+        sell1=0
+        buy2=float("-inf")
+        sell2=0
         
-        return dp(0, False, 0)
+        for price in prices:
+            buy1 = max(buy1, -price)
+            sell1 = max(sell1, buy1 + price)
+            buy2 = max(buy2, sell1 - price)
+            sell2 = max(sell2, buy2 + price)
+
+        return sell2
