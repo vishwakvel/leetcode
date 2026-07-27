@@ -7,7 +7,7 @@ class Solution:
         
         states = [0] * numCourses
         ans = []
-
+        
         def dfs(course):
             if states[course] == 1:
                 return False
