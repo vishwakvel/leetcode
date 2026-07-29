@@ -2,22 +2,22 @@ class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
         m = len(board)
         n = len(board[0])
-
-        def backtracking(i, row, col):
-            if i == len(word):
+        
+        def backtracking(index, row, col):
+            if index == len(word):
                 return True
-            
-            if row >= m or col >= n or row < 0 or col < 0:
+
+            if row < 0 or col < 0 or row >= m or col >= n:
                 return False
-            
+
             char = board[row][col]
 
-            if char != word[i] or char == ".":
+            if char != word[index] or char == ".":
                 return False
             
             board[row][col] = "."
 
-            found = backtracking(i+1, row, col+1) or backtracking(i+1, row, col-1) or backtracking(i+1, row+1, col) or backtracking(i+1, row-1, col)
+            found = backtracking(index+1, row+1, col) or backtracking(index+1, row-1, col) or backtracking(index+1, row, col+1) or backtracking(index+1, row, col-1)
 
             board[row][col] = char
             return found
