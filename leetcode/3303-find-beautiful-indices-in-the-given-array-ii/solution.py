@@ -17,17 +17,17 @@ class Solution:
                     i += 1
             
             result = []
-            t = 0 # text pointer
-            p = 0 # pattern pointer
+            t = 0
+            p = 0
 
             while t < len(text):
-                if pattern[p] == text[t]:
+                if text[t] == pattern[p]:
                     t += 1
                     p += 1
 
                     if p == len(pattern):
                         result.append(t - p)
-                        p = lps[p-1]
+                        p = lps[p - 1]
                 elif p > 0:
                     p = lps[p - 1]
                 else:
