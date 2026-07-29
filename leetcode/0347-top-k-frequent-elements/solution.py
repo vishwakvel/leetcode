@@ -2,16 +2,20 @@ import heapq
 
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        hashmap = defaultdict(int)
-        heap = []
+        freq = defaultdict(int)
 
         for num in nums:
-            hashmap[num] += 1
-        
-        for num in hashmap:
-            heapq.heappush(heap, (hashmap[num], num))
+            freq[num] += 1
 
-            if len(heap) > k:
-                heapq.heappop(heap)
-        
-        return [element for freq, element in heap]
+        buckets = [[] for i in range(len(nums) + 1)] # each index is freq
+
+        for num, count in freq.items():
+            buckets[count].append(num)
+
+        ans = []
+
+        for count in range(len(buckets) - 1, 0, -1):
+            for num in buckets[count]:
+                ans.append(num)
+                if len(ans) == k:
+                    return ans
